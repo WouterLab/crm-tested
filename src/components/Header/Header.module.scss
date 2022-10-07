@@ -1,0 +1,137 @@
+@import "../../styles/colors.scss";
+
+header {
+  background: $bg-manage;
+  position: fixed;
+  width: 100%;
+  font-size: 14px;
+  line-height: 16px;
+  color: $text;
+  height: 44px;
+}
+
+.headerTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  border-bottom: 1px solid $line;
+  height: 100%;
+  padding: 0 20px;
+}
+
+.viewLink {
+  margin-right: 28px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  transition: all 0.3s ease-in;
+}
+
+.viewLink:not(.selected):hover {
+  color: #fff;
+}
+
+.selected {
+  color: #fff;
+  border-bottom: #fff 2px solid;
+  padding-top: 2px;
+}
+
+.appIcon,
+.appIcon:not(:hover) {
+  color: $text;
+  cursor: pointer;
+  margin-right: 20px;
+  transition: all 0.3s;
+}
+
+.appIcon:hover {
+  color: #fff;
+  transition: all 0.3s;
+}
+
+.replyIcon,
+.replyIcon:not(:hover) {
+  color: $text;
+  cursor: pointer;
+  margin-right: 31px;
+  transition: all 0.3s;
+}
+
+.replyIcon:hover {
+  color: #fff;
+  transition: all 0.3s;
+}
+
+.headerTop__left {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.headerTop__left p {
+  cursor: pointer;
+}
+
+.headerTop__right {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  cursor: pointer;
+}
+
+.headerTop__right p {
+  margin-left: 8px;
+}
+
+.headerBottom {
+  background: $bg-manage;
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 0 20px;
+  border-bottom: 1px solid $line;
+}
+
+.headerBottom__left {
+  width: 234px;
+  border-right: 1px solid $line;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.nameWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.moreBtn {
+  margin-right: 7px;
+  color: white;
+}
+
+.abbri {
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.headerBottom__right {
+  border-right: 1px solid $line;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 15px;
+}
+
+.headerBottom__right p {
+  line-height: 21px;
+  font-size: 18px;
+}

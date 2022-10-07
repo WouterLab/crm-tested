@@ -1,56 +1,93 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.scss";
+import Layout from "./common/Layout";
+import Table from "./components/Table/Table";
+import { NewRowData } from "./interfaces/interfaces";
+import {
+  countPrice,
+  makeEmptyLevel,
+  makeEmptyRow,
+  recalculation,
+  sortArray,
+} from "./utils/functions";
 
-function App() {
+function App(): JSX.Element {
+  const initialData: NewRowData[] = [];
+  const [dataRows, setDataRows] = useState(initialData);
+  useEffect(() => {
+    fetch("https://63267beaba4a9c475326fd42.mockapi.io/api/dbases/data")
+      .then((res) => res.json())
+      .then((json) => countPrice(json))
+      .then((priced) => sortArray(priced))
+      .then((data) => {
+        const oldRow = data.filter((rows) => rows.price !== 0);
+        const updated = recalculation(1, data);
+        updated.map((row) => oldRow.unshift(row));
+        return oldRow;
+      })
+      .then((data) => setDataRows(data));
+  }, []);
+
+  const saveRow = (rowData: NewRowData): void => {
+    const newArr = [...dataRows];
+    const currentData = dataRows.filter((el) => el.id === rowData.id);
+    const popped = currentData.pop();
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const rowIndex = dataRows.indexOf(popped!);
+    newArr.splice(rowIndex, 1, rowData);
+    const counted = countPrice(newArr);
+    const sorted = sortArray(counted);
+    const oldRow = sorted.filter((rows) => rows.price !== 0);
+    const updated = recalculation(1, sorted);
+    updated.map((row) => oldRow.unshift(row));
+    setDataRows(sorted);
+  };
+
+  const handleLevelClick = (id: number, parent: number | null): void => {
+    const newLevel = makeEmptyLevel(id, parent);
+    const arrWithNewLevel = [...dataRows];
+    arrWithNewLevel.push(newLevel);
+    // const newLevel = makeEmptyLevel(id, parent);
+    // const arrWithNewLevel = [...dataRows];
+    // arrWithNewLevel.push(newLevel);
+    // const sorted = sortArray(arrWithNewLevel);
+    // console.log(sorted);
+
+    // const oldRow = sorted.filter((rows) => rows.price !== 0);
+    // const updated = recalculation(1, sorted);
+    // updated.map((row) => oldRow.unshift(row));
+    setDataRows(arrWithNewLevel);
+  };
+
+  const handleRowClick = (id: number, parent: number): void => {
+    const newRow = makeEmptyRow(id, parent);
+    const arrWithNewRow = [...dataRows];
+    arrWithNewRow.push(newRow);
+    const sorted = sortArray(arrWithNewRow);
+    const oldRow = sorted.filter((rows) => rows.price !== 0);
+    const updated = recalculation(1, sorted);
+    updated.map((row) => oldRow.unshift(row));
+    setDataRows(sorted);
+  };
+
+  const handleTopLevelClick = (id: number, parent: null): void => {
+    const newRow = makeEmptyLevel(id, parent);
+    const arrWithNewLevel = [...dataRows];
+    arrWithNewLevel.push(newRow);
+    setDataRows(arrWithNewLevel);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+    <div className='App'>
+      <Layout>
+        <Table
+          data={dataRows}
+          saveRow={saveRow}
+          handleLevelClick={handleLevelClick}
+          handleRowClick={handleRowClick}
+          handleTopLevelClick={handleTopLevelClick}
+        />
+      </Layout>
     </div>
   );
 }

@@ -1,0 +1,13 @@
+@import "../../styles/colors.scss";
+
+.table {
+  width: 100%;
+  padding: 0 9px;
+}
+
+.tableHead {
+  display: grid;
+  grid-template-columns: 110px 757px 1fr 1fr 1fr 1fr;
+  padding: 11px 12px;
+  color: $text;
+}

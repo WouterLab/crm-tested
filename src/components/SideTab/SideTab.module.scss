@@ -1,0 +1,23 @@
+@import "../../styles/colors.scss";
+
+.sidetab {
+  display: flex;
+  align-items: center;
+  color: #fff;
+  padding: 5px 0;
+  pointer-events: none;
+  transition: all 0.3s ease-in;
+}
+
+.sidetab:hover {
+  background: #6e6e75;
+}
+
+.sidebarIcon {
+  margin-left: 20px;
+  margin-right: 14px;
+}
+
+.active {
+  background: $text;
+}

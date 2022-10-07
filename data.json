@@ -1,0 +1,38 @@
+[
+  {
+    "id": 0,
+    "title": "Южная строительная площадка",
+    "price": 0,
+    "parent": null,
+    "type": "level",
+    "childs": [1]
+  },
+  {
+    "id": 12,
+    "title": "Статья работы № 2",
+    "price": 0,
+    "unit": "л",
+    "unitPrice": 850,
+    "quantity": 1200,
+    "parent": 1,
+    "type": "row"
+  },
+  {
+    "id": 1,
+    "title": "Фундаментальные работы",
+    "price": 0,
+    "parent": 0,
+    "type": "level",
+    "childs": [11, 12]
+  },
+  {
+    "id": 11,
+    "title": "Статья работы № 1",
+    "price": 0,
+    "unit": "м3",
+    "unitPrice": 108.07,
+    "quantity": 1750,
+    "parent": 1,
+    "type": "row"
+  }
+]
