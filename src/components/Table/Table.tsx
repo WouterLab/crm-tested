@@ -5,18 +5,11 @@ import styles from "./Table.module.scss";
 type TableProps = {
   data: NewRowData[];
   saveRow: (data: NewRowData) => void;
-  handleRowClick: (id: number, parent: number) => void;
-  handleLevelClick: (id: number, parent: number) => void;
-  handleTopLevelClick: (id: number, parent: null) => void;
+  addNewLevel: (id: number, parent: number | null) => void;
+  addNewRow: (id: number, parent: number | null) => void;
 };
 
-const Table = ({
-  data,
-  saveRow,
-  handleRowClick,
-  handleLevelClick,
-  handleTopLevelClick
-}: TableProps): JSX.Element => {
+const Table = ({ data, saveRow, addNewLevel, addNewRow }: TableProps): JSX.Element => {
   return (
     <div className={styles.table}>
       <div className={styles.tableHead}>
@@ -42,9 +35,8 @@ const Table = ({
             childs={row.childs}
             editing={row.editing}
             saveRow={saveRow}
-            handleRowClick={handleRowClick}
-            handleLevelClick={handleLevelClick}
-            handleTopLevelClick={handleTopLevelClick}
+            addNewLevel={addNewLevel}
+            addNewRow={addNewRow}
           />
         );
       })}

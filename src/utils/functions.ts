@@ -40,36 +40,40 @@ export const countPrice = (arr: NewRowData[]): NewRowData[] => {
 export const sortArray = (arr: NewRowData[]): NewRowData[] => {
   const sorted: NewRowData[] = [];
   const topLevel = arr.filter((el) => el.parent === null);
-  sorted.push(topLevel[0]);
-  const secondLevel = arr.filter((el) => el.parent === topLevel[0].id);
-  secondLevel.forEach((el) => {
+  topLevel.map((el) => {
     sorted.push(el);
-    const thirdLevel = arr.filter((s) => s.parent === el.id);
-    thirdLevel.forEach((el) => {
+    const secondLevel = arr.filter((s) => s.parent === el.id);
+    secondLevel.map((el) => {
       sorted.push(el);
-      sorted.concat(el);
+      const thirdLevel = arr.filter((t) => t.parent === el.id);
+      thirdLevel.map((el) => {
+        sorted.push(el);
+      });
     });
   });
   return sorted;
 };
 
-export const makeEmptyRow = (neighbourId: number, parent: number): NewRowData => {
+export const makeEmptyRow = (id: number, parent: number | null): NewRowData => {
   return {
-    id: neighbourId + 1,
+    id: id + 1,
     title: "",
     unit: "",
     quantity: 0,
     unitPrice: 0,
     price: 0,
-    parent,
+    parent: parent,
     type: "row",
     editing: true,
   };
 };
 
-export const makeEmptyLevel = (id: number, parent: number | null): NewRowData => {
+export const makeEmptyLevel = (
+  id: number,
+  parent: number | null,
+): NewRowData => {
   return {
-    id: id,
+    id: id + 1,
     title: "",
     unit: "",
     quantity: 0,

@@ -21,7 +21,7 @@ function App(): JSX.Element {
       .then((priced) => sortArray(priced))
       .then((data) => {
         const oldRow = data.filter((rows) => rows.price !== 0);
-        const updated = recalculation(1, data);
+        const updated = recalculation(2222, data);
         updated.map((row) => oldRow.unshift(row));
         return oldRow;
       })
@@ -30,51 +30,42 @@ function App(): JSX.Element {
 
   const saveRow = (rowData: NewRowData): void => {
     const newArr = [...dataRows];
-    const currentData = dataRows.filter((el) => el.id === rowData.id);
-    const popped = currentData.pop();
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const rowIndex = dataRows.indexOf(popped!);
-    newArr.splice(rowIndex, 1, rowData);
+    const changeRowIndex = dataRows.findIndex((el) => el.id === rowData.id);
+    newArr.splice(changeRowIndex, 1, rowData);
     const counted = countPrice(newArr);
-    const sorted = sortArray(counted);
-    const oldRow = sorted.filter((rows) => rows.price !== 0);
-    const updated = recalculation(1, sorted);
-    updated.map((row) => oldRow.unshift(row));
-    setDataRows(sorted);
+    const oldRow = counted.filter((rows) => rows.price !== 0);
+    const allLevels = dataRows.filter((el) => {
+      const parent = el.parent?.toString();
+      return parent?.startsWith("111");
+    });
+    const reversed = allLevels.reverse();
+    reversed.map((el) => {
+      const updated = recalculation(el.id, counted);
+      updated.map((row) => oldRow.unshift(row));
+      setDataRows(counted);
+    });
   };
 
-  const handleLevelClick = (id: number, parent: number | null): void => {
-    const newLevel = makeEmptyLevel(id, parent);
-    const arrWithNewLevel = [...dataRows];
-    arrWithNewLevel.push(newLevel);
-    // const newLevel = makeEmptyLevel(id, parent);
-    // const arrWithNewLevel = [...dataRows];
-    // arrWithNewLevel.push(newLevel);
-    // const sorted = sortArray(arrWithNewLevel);
-    // console.log(sorted);
-
-    // const oldRow = sorted.filter((rows) => rows.price !== 0);
-    // const updated = recalculation(1, sorted);
-    // updated.map((row) => oldRow.unshift(row));
-    setDataRows(arrWithNewLevel);
-  };
-
-  const handleRowClick = (id: number, parent: number): void => {
-    const newRow = makeEmptyRow(id, parent);
-    const arrWithNewRow = [...dataRows];
-    arrWithNewRow.push(newRow);
-    const sorted = sortArray(arrWithNewRow);
-    const oldRow = sorted.filter((rows) => rows.price !== 0);
-    const updated = recalculation(1, sorted);
-    updated.map((row) => oldRow.unshift(row));
-    setDataRows(sorted);
-  };
-
-  const handleTopLevelClick = (id: number, parent: null): void => {
+  const addNewLevel = (id: number, parent: number | null): void => {
+    const newArr = [...dataRows];
     const newRow = makeEmptyLevel(id, parent);
-    const arrWithNewLevel = [...dataRows];
-    arrWithNewLevel.push(newRow);
-    setDataRows(arrWithNewLevel);
+    newArr.splice(dataRows.length, 0, newRow);
+    setDataRows(newArr);
+  };
+
+  const addNewRow = (id: number, parent: number | null): void => {
+    const newArr = [...dataRows];
+    const checkId = dataRows.findIndex((el) => el.id === id);
+    if (checkId === -1) {
+      const newRow = makeEmptyRow(id, parent);
+      newArr.splice(dataRows.length, 0, newRow);
+      const sortedArr = sortArray(newArr);
+      setDataRows(sortedArr);
+    } else {
+      const newRow = makeEmptyRow(id + 1, parent);
+      newArr.splice(dataRows.length, 0, newRow);
+      setDataRows(newArr);
+    }
   };
 
   return (
@@ -83,9 +74,8 @@ function App(): JSX.Element {
         <Table
           data={dataRows}
           saveRow={saveRow}
-          handleLevelClick={handleLevelClick}
-          handleRowClick={handleRowClick}
-          handleTopLevelClick={handleTopLevelClick}
+          addNewLevel={addNewLevel}
+          addNewRow={addNewRow}
         />
       </Layout>
     </div>

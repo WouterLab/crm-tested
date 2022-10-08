@@ -8,9 +8,8 @@ import { useState } from "react";
 interface RowProps extends NewRowData {
   key: number;
   saveRow: (data: NewRowData) => void;
-  handleRowClick: (id: number, parent: number) => void;
-  handleLevelClick: (id: number, parent: number) => void;
-  handleTopLevelClick: (id: number, parent: null) => void;
+  addNewLevel: (id: number, parent: number | null) => void
+  addNewRow: (id: number, parent: number | null) => void
 }
 
 const Row = ({
@@ -24,9 +23,8 @@ const Row = ({
   type,
   editing,
   saveRow,
-  handleRowClick,
-  handleLevelClick,
-  handleTopLevelClick
+  addNewLevel,
+  addNewRow
 }: RowProps): JSX.Element => {
   const [isEditable, setIsEditable] = useState(editing);
   const [showIcon, setShowIcon] = useState(false);
@@ -46,9 +44,9 @@ const Row = ({
     marginLeft:
       parent === null
         ? "0"
-        : parent === 0
+        : parent === 1111
         ? "20px"
-        : parent === 1
+        : parent === 2222
         ? "40px"
         : "60px",
   };
@@ -175,13 +173,12 @@ const Row = ({
             <img
               src={Docs}
               alt='docs'
-              onClick={(): void => handleRowClick(id, parent!)}
             />
             {showIcon && (
               <img
                 src={Docs}
                 alt='docs'
-                onClick={(): void => handleRowClick(id, parent!)}
+                onClick={():void => addNewRow(id, parent)}
               />
             )}
           </div>
@@ -203,18 +200,17 @@ const Row = ({
               <img
                 src={BlueFolder}
                 alt='folder'
-                onClick={(): void => handleTopLevelClick(id, parent)}
               />
             )}
             {parent !== null && (
               <img
                 src={GreenFolder}
                 alt='folder'
-                onClick={(): void => handleLevelClick(id, parent)}
+                onClick={():void => addNewLevel(id, parent)}
               />
             )}
-            {showIcon && parent !== null && <img src={Docs} alt='docs' />}
-            {showIcon && parent === null && <img src={Docs} alt='docs' />}
+            {showIcon && parent === null && <img src={GreenFolder} alt='folder' onClick={():void => addNewLevel(id, id)} />}
+            {showIcon && parent !== null && <img src={Docs} alt='docs' onClick={():void => addNewRow(id, id)} />}
           </div>
           <div>{rowData.title}</div>
           <div>{rowData.unit}</div>
